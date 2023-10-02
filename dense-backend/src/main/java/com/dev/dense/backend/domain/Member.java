@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.hibernate.annotations.DynamicUpdate;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -65,5 +66,13 @@ public class Member {
 
 	@Column(name = "lock_time")
 	private Date lockTime;
+
+	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinTable( //
+			name = "member_history", //
+			joinColumns = @JoinColumn(name = "member_id"), //
+			inverseJoinColumns = @JoinColumn(name = "history_id") //
+	)
+	private Set<PasswordHistory> historys = new HashSet<>();
 
 }
