@@ -9,6 +9,7 @@ package com.dev.dense.backend;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.dev.dense.backend.domain.Permission;
+import com.dev.dense.backend.domain.Role;
 import com.dev.dense.backend.service.UserService;
 
 @SpringBootTest
@@ -58,6 +60,30 @@ public class UserServiceTest {
 		userService.deletePermission(p2.getId());
 		ps = userService.readPermissions();
 		assertEquals(ps.size(), 1);
+	}
+
+	@Test
+	void testRole() {
+		List<Permission> ps = userService.readPermissions();
+
+		Role r = new Role();
+		r.setId(1L);
+		r.setName("role1");
+		r.setDescription("Role 1");
+		r.setPermissions(new HashSet<>(ps));
+
+		boolean created = userService.createRole(r);
+		assertEquals(created, true);
+
+		Role read = userService.readRole(r.getId()).get();
+		assertEquals(read, r);
+
+		r.setDescription("Role 1a");
+		Role updated = userService.updateRole(r);
+		assertEquals(updated.getDescription(), "Role 1a");
+
+		userService.deleteRole(r.getId());
+		assertEquals(userService.readRole(r.getId()).isEmpty(), true);
 	}
 
 }

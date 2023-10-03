@@ -18,6 +18,7 @@ import com.dev.dense.backend.domain.Permission;
 import com.dev.dense.backend.domain.Role;
 import com.dev.dense.backend.repository.MemberRepository;
 import com.dev.dense.backend.repository.PermissionRepository;
+import com.dev.dense.backend.repository.RoleRepository;
 
 @Service
 public class UserService {
@@ -26,7 +27,40 @@ public class UserService {
 	MemberRepository memberRepository;
 
 	@Autowired
+	RoleRepository roleRepository;
+
+	@Autowired
 	PermissionRepository permissionRepository;
+
+	public boolean createRole(Role role) {
+		boolean existence = roleRepository.existsById(role.getId());
+
+		if (existence) {
+			return false;
+		}
+
+		Role saved = roleRepository.save(role);
+		if (!saved.equals(role)) {
+			return false;
+		}
+		return true;
+	}
+
+	public Optional<Role> readRole(Long id) {
+		return roleRepository.findById(id);
+	}
+
+	public Role updateRole(Role role) {
+		return roleRepository.save(role);
+	}
+
+	public List<Role> updateRole(List<Role> roles) {
+		return roleRepository.saveAll(roles);
+	}
+	
+	public void deleteRole(Long id) {
+		roleRepository.deleteById(id);
+	}
 
 	public boolean createPermission(Permission permission) {
 		boolean existence = permissionRepository.existsById(permission.getId());
