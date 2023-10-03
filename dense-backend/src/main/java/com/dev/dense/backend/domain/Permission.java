@@ -17,7 +17,6 @@ import lombok.Data;
 @Data
 @Entity
 @DynamicUpdate
-@SuppressWarnings("unused")
 public class Permission {
 
 	@Id
