@@ -36,7 +36,7 @@ public class UserService {
 		}
 
 		Permission saved = permissionRepository.save(permission);
-		if (saved != permission) {
+		if (!saved.equals(permission)) {
 			return false;
 		}
 		return true;
